@@ -15,12 +15,15 @@ import {
   RefreshCw,
   Type,
   Layout,
-  Instagram,
   Twitter,
   Linkedin,
-  Mail,
-  Video
+  Mail
 } from 'lucide-react';
+
+/**
+ * AI ToolSphere - Premium UI Hub
+ * Custom tailored for tools.buildbyalistar.com
+ */
 
 // --- Shared UI Components ---
 
@@ -31,11 +34,9 @@ const Button = ({ children, variant = 'primary', className = '', ...props }) => 
     purple: 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white shadow-xl shadow-purple-500/20',
   };
 
-  const selectedVariant = variants[variant] || variants.primary;
-
   return (
     <button 
-      className={`px-4 py-2.5 rounded-xl font-medium transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${selectedVariant} ${className}`}
+      className={`px-4 py-2.5 rounded-xl font-medium transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${variants[variant]} ${className}`}
       {...props}
     >
       {children}
@@ -49,9 +50,8 @@ const Badge = ({ children, variant = 'free' }) => {
     pro: 'bg-purple-500/10 text-purple-400 border-purple-500/20',
     new: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
   };
-  const selectedStyle = styles[variant] || styles.free;
   return (
-    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${selectedStyle}`}>
+    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md border ${styles[variant]}`}>
       {children}
     </span>
   );
@@ -83,7 +83,7 @@ const Dashboard = ({ onSelectTool }) => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12 space-y-24">
-      {/* Hero */}
+      {/* Hero Section */}
       <section className="text-center space-y-6 pt-10">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-medium text-zinc-500">
           <Globe className="w-3.5 h-3.5" />
@@ -98,14 +98,7 @@ const Dashboard = ({ onSelectTool }) => {
           No switching tabs. No subscriptions maze.
         </p>
         <div className="pt-4 flex flex-col items-center gap-4">
-          <Button 
-            variant="purple" 
-            className="px-10 py-4 text-lg" 
-            onClick={() => {
-              const el = document.getElementById('tools');
-              if (el) el.scrollIntoView({ behavior: 'smooth' });
-            }}
-          >
+          <Button variant="purple" className="px-10 py-4 text-lg" onClick={() => document.getElementById('tools').scrollIntoView({ behavior: 'smooth' })}>
             <Zap className="w-5 h-5 fill-current" />
             Open your tools
           </Button>
@@ -116,7 +109,7 @@ const Dashboard = ({ onSelectTool }) => {
         </div>
       </section>
 
-      {/* Tool Grid */}
+      {/* Tool Categories Grid */}
       <div id="tools" className="grid grid-cols-1 gap-16">
         {categories.map((cat, i) => (
           <div key={i} className="space-y-6">
@@ -148,11 +141,11 @@ const Dashboard = ({ onSelectTool }) => {
         ))}
       </div>
 
-      {/* Pricing */}
+      {/* Pricing Section */}
       <section id="pricing" className="py-20 border-t border-zinc-900">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold mb-4">Simple, honest pricing</h2>
-          <p className="text-zinc-500">Transparency is our core value.</p>
+          <p className="text-zinc-500">Transparent value for creators and teams.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {[
@@ -228,117 +221,8 @@ const BioWriter = ({ onBack }) => {
           </div>
         </div>
         <div className="bg-zinc-900/40 border border-zinc-800 rounded-3xl p-8 flex flex-col justify-between min-h-[400px]">
-          <div className="text-zinc-300 leading-relaxed italic">{result || 'Your professional bio will appear here after generation...'}</div>
-          {result && (
-            <Button 
-              variant="secondary" 
-              className="self-end text-xs" 
-              onClick={() => {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                  navigator.clipboard.writeText(result);
-                } else {
-                  const textArea = document.createElement("textarea");
-                  textArea.value = result;
-                  document.body.appendChild(textArea);
-                  textArea.select();
-                  document.execCommand('copy');
-                  document.body.removeChild(textArea);
-                }
-              }}
-            >
-              <Copy className="w-3 h-3" /> Copy Bio
-            </Button>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// --- View: Headline Generator ---
-
-const HeadlineGenerator = ({ onBack }) => {
-  const [formData, setFormData] = useState({ topic: '', audience: '', type: 'Blog Post' });
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [results, setResults] = useState([]);
-
-  const handleGenerate = () => {
-    setIsGenerating(true);
-    setTimeout(() => {
-      setResults([
-        `10 Proven Secrets to Mastering ${formData.topic || 'Your Passion'}`,
-        `Why ${formData.audience || 'Professionals'} are Failing at ${formData.topic || 'their goals'} (and how to fix it)`,
-        `The Ultimate Guide to ${formData.topic || 'Success'} for ${formData.audience || 'Beginners'}`,
-        `5 Myths About ${formData.topic || 'Productivity'} Debunked`
-      ]);
-      setIsGenerating(false);
-    }, 2000);
-  };
-
-  return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <button onClick={onBack} className="flex items-center gap-2 text-zinc-500 hover:text-white mb-8 group">
-        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to dashboard
-      </button>
-      <div className="space-y-12">
-        <div className="flex items-center gap-4">
-          <div className="p-4 rounded-2xl bg-indigo-600/10 text-indigo-500 border border-indigo-500/20"><Type className="w-8 h-8" /></div>
-          <div>
-            <h1 className="text-3xl font-bold">Headline Generator</h1>
-            <p className="text-zinc-500">Generate scroll-stopping headlines for any content.</p>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          <div className="space-y-6">
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase text-zinc-500">What's it about?</label>
-              <textarea placeholder="e.g. How to grow my newsletter to 10k subscribers" className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-white h-24 focus:border-indigo-500" onChange={e => setFormData({...formData, topic: e.target.value})} />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-bold uppercase text-zinc-500">Target Audience (Optional)</label>
-              <input type="text" placeholder="e.g. Indie Hackers, Startup Founders" className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-white focus:border-indigo-500" onChange={e => setFormData({...formData, audience: e.target.value})} />
-            </div>
-            <div className="space-y-3">
-              <label className="text-[10px] font-bold uppercase text-zinc-500">Content Type</label>
-              <div className="flex flex-wrap gap-2">
-                {['Blog Post', 'Email Subject', 'Social Post', 'Ad Copy'].map(t => (
-                  <button key={t} onClick={() => setFormData({...formData, type: t})} className={`px-4 py-2 rounded-lg text-xs font-bold border transition-all ${formData.type === t ? 'bg-white text-black border-white' : 'bg-zinc-900 text-zinc-500 border-zinc-800'}`}>{t}</button>
-                ))}
-              </div>
-            </div>
-            <Button variant="purple" className="w-full py-4" onClick={handleGenerate} disabled={isGenerating}>
-              {isGenerating ? <RefreshCw className="w-5 h-5 animate-spin" /> : 'Generate Headlines'}
-            </Button>
-          </div>
-          <div className="space-y-4">
-            {results.length > 0 ? results.map((r, i) => (
-              <div key={i} className="bg-zinc-900/40 border border-zinc-800 p-4 rounded-xl flex justify-between items-center group">
-                <p className="text-sm font-medium">{r}</p>
-                <button 
-                  onClick={() => {
-                    if (navigator.clipboard && navigator.clipboard.writeText) {
-                      navigator.clipboard.writeText(r);
-                    } else {
-                      const textArea = document.createElement("textarea");
-                      textArea.value = r;
-                      document.body.appendChild(textArea);
-                      textArea.select();
-                      document.execCommand('copy');
-                      document.body.removeChild(textArea);
-                    }
-                  }} 
-                  className="text-zinc-500 hover:text-white"
-                >
-                  <Copy className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            )) : (
-              <div className="h-full border border-zinc-900 border-dashed rounded-2xl flex flex-col items-center justify-center text-zinc-600 gap-4 p-12">
-                <Sparkles className="w-8 h-8 opacity-20" />
-                <p className="text-sm">Headlines will appear here.</p>
-              </div>
-            )}
-          </div>
+          <div className="text-zinc-300 leading-relaxed italic">{result || 'Your professional bio will appear here...'}</div>
+          {result && <Button variant="secondary" className="self-end text-xs" onClick={() => navigator.clipboard.writeText(result)}><Copy className="w-3 h-3" /> Copy Bio</Button>}
         </div>
       </div>
     </div>
@@ -366,19 +250,6 @@ const ContentRepurposer = ({ onBack }) => {
       });
       setIsGenerating(false);
     }, 2500);
-  };
-
-  const copyToClipboard = (text) => {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text);
-    } else {
-      const textArea = document.createElement("textarea");
-      textArea.value = text;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-    }
   };
 
   return (
@@ -415,7 +286,7 @@ const ContentRepurposer = ({ onBack }) => {
                 <div className="bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 space-y-4">
                   <div className="flex justify-between items-center border-b border-zinc-800 pb-3">
                     <span className="flex items-center gap-2 text-xs font-bold uppercase text-zinc-500"><Twitter className="w-3.5 h-3.5" /> Twitter Thread</span>
-                    <button onClick={() => copyToClipboard(results.twitter.join('\n'))} className="text-indigo-400 text-[10px] font-bold uppercase flex items-center gap-1"><Copy className="w-3 h-3" /> Copy All</button>
+                    <button onClick={() => navigator.clipboard.writeText(results.twitter.join('\n'))} className="text-indigo-400 text-[10px] font-bold uppercase flex items-center gap-1"><Copy className="w-3 h-3" /> Copy All</button>
                   </div>
                   <div className="space-y-3 text-sm text-zinc-300">
                     {results.twitter.map((t, i) => <p key={i}>{t}</p>)}
@@ -424,7 +295,7 @@ const ContentRepurposer = ({ onBack }) => {
                 <div className="bg-zinc-900/40 border border-zinc-800 rounded-2xl p-6 space-y-4">
                   <div className="flex justify-between items-center border-b border-zinc-800 pb-3">
                     <span className="flex items-center gap-2 text-xs font-bold uppercase text-zinc-500"><Linkedin className="w-3.5 h-3.5" /> LinkedIn Post</span>
-                    <button onClick={() => copyToClipboard(results.linkedin)} className="text-indigo-400 text-[10px] font-bold uppercase flex items-center gap-1"><Copy className="w-3 h-3" /> Copy</button>
+                    <button onClick={() => navigator.clipboard.writeText(results.linkedin)} className="text-indigo-400 text-[10px] font-bold uppercase flex items-center gap-1"><Copy className="w-3 h-3" /> Copy</button>
                   </div>
                   <p className="text-sm text-zinc-300 leading-relaxed">{results.linkedin}</p>
                 </div>
@@ -442,7 +313,82 @@ const ContentRepurposer = ({ onBack }) => {
   );
 };
 
-// --- App Shell ---
+// --- View: Headline Generator ---
+
+const HeadlineGenerator = ({ onBack }) => {
+  const [formData, setFormData] = useState({ topic: '', audience: '', type: 'Blog Post' });
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [results, setResults] = useState([]);
+
+  const handleGenerate = () => {
+    setIsGenerating(true);
+    setTimeout(() => {
+      setResults([
+        `10 Proven Secrets to Mastering ${formData.topic || 'Your Passion'}`,
+        `Why ${formData.audience || 'Professionals'} are Failing at ${formData.topic || 'their goals'}`,
+        `The Ultimate Guide to ${formData.topic || 'Success'} for ${formData.audience || 'Beginners'}`,
+        `5 Myths About ${formData.topic || 'Productivity'} Debunked`
+      ]);
+      setIsGenerating(false);
+    }, 2000);
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto px-4 py-12">
+      <button onClick={onBack} className="flex items-center gap-2 text-zinc-500 hover:text-white mb-8 group">
+        <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back to dashboard
+      </button>
+      <div className="space-y-12">
+        <div className="flex items-center gap-4">
+          <div className="p-4 rounded-2xl bg-indigo-600/10 text-indigo-500 border border-indigo-500/20"><Type className="w-8 h-8" /></div>
+          <div>
+            <h1 className="text-3xl font-bold">Headline Generator</h1>
+            <p className="text-zinc-500">Generate scroll-stopping headlines for any content.</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="space-y-6">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold uppercase text-zinc-500">What's it about?</label>
+              <textarea placeholder="e.g. How to grow my newsletter to 10k subscribers" className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-white h-24 focus:border-indigo-500" onChange={e => setFormData({...formData, topic: e.target.value})} />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-bold uppercase text-zinc-500">Target Audience (Optional)</label>
+              <input type="text" placeholder="e.g. Indie Hackers, Founders" className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3 text-white focus:border-indigo-500" onChange={e => setFormData({...formData, audience: e.target.value})} />
+            </div>
+            <div className="space-y-3">
+              <label className="text-[10px] font-bold uppercase text-zinc-500">Content Type</label>
+              <div className="flex flex-wrap gap-2">
+                {['Blog Post', 'Email Subject', 'Social Post', 'Ad Copy'].map(t => (
+                  <button key={t} onClick={() => setFormData({...formData, type: t})} className={`px-4 py-2 rounded-lg text-xs font-bold border transition-all ${formData.type === t ? 'bg-white text-black border-white' : 'bg-zinc-900 text-zinc-500 border-zinc-800'}`}>{t}</button>
+                ))}
+              </div>
+            </div>
+            <Button variant="purple" className="w-full py-4" onClick={handleGenerate} disabled={isGenerating}>
+              {isGenerating ? <RefreshCw className="w-5 h-5 animate-spin" /> : 'Generate Headlines'}
+            </Button>
+          </div>
+          <div className="space-y-4">
+            {results.map((r, i) => (
+              <div key={i} className="bg-zinc-900/40 border border-zinc-800 p-4 rounded-xl flex justify-between items-center group">
+                <p className="text-sm font-medium">{r}</p>
+                <button onClick={() => navigator.clipboard.writeText(r)} className="text-zinc-500 hover:text-white"><Copy className="w-3.5 h-3.5" /></button>
+              </div>
+            ))}
+            {results.length === 0 && (
+              <div className="h-full border border-zinc-900 border-dashed rounded-2xl flex flex-col items-center justify-center text-zinc-700 gap-4 p-12">
+                <Sparkles className="w-8 h-8 opacity-10" />
+                <p className="text-sm">Headlines will appear here.</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// --- Main App Shell ---
 
 export default function App() {
   const [view, setView] = useState('dashboard');
@@ -481,8 +427,8 @@ export default function App() {
       <main className="relative">
         {view === 'dashboard' && <Dashboard onSelectTool={(t) => setView(t.id)} />}
         {view === 'bio-writer' && <BioWriter onBack={() => setView('dashboard')} />}
-        {view === 'headline-gen' && <HeadlineGenerator onBack={() => setView('dashboard')} />}
         {view === 'content-repurposer' && <ContentRepurposer onBack={() => setView('dashboard')} />}
+        {view === 'headline-gen' && <HeadlineGenerator onBack={() => setView('dashboard')} />}
       </main>
 
       <footer className="border-t border-zinc-900 py-16 mt-20 relative bg-zinc-950/20 text-center text-[10px] text-zinc-700 font-bold uppercase tracking-[0.3em]">
